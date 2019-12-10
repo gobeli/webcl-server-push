@@ -1,19 +1,21 @@
-import { writable } from 'svelte/store';
+let todos, interval;
 
-let todos = writable([]), interval;
-
-const connect = () => {
+const connect = todoStore => {
+  todos = todoStore;
   interval = setInterval(() => {
     addTodo('bla');
   }, 3000);
 }
 
 const disconnect = () => {
-  clearImmediate(interval);
-  todos.set([]);
+  clearInterval(interval);
+  todos = null;
 }
 
 const addTodo = text => {
+  if (!todos) {
+    throw 'Service not initialized!';
+  }
   todos.update(todos => {
     return [...todos, { text: text, done: false }]
   });
@@ -21,7 +23,6 @@ const addTodo = text => {
 
 export default {
   name: 'Local Service',
-  todos,
   connect,
   disconnect,
   addTodo

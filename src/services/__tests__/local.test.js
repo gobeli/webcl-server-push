@@ -1,13 +1,11 @@
 import LocalService from '../local';
+import { writable } from 'svelte/store';
 
 describe('local service', () => {
-  it('should intitiate todos', () => {
-    expect(LocalService.todos).toBeDefined();
-  });
-
   it('should update todos periodically on connect', done => {
     // given
-    LocalService.todos.subscribe(todos => {
+    const todos = writable([]);
+    todos.subscribe(todos => {
       if (todos.length === 1) {
         expect(todos[0].text).toBe('bla');
         done();
@@ -15,6 +13,6 @@ describe('local service', () => {
     });
 
     // when
-    LocalService.connect();
+    LocalService.connect(todos);
   });
 });

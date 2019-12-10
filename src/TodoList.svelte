@@ -2,11 +2,11 @@
   import { onMount } from 'svelte';
   let todos = [];
 
-  $: service && service.todos.subscribe(t => {
+  $: todos$.subscribe(t => {
     todos = t;
   });
 
-  export let service;
+  export let todos$;
 </script>
 <ul>
   {#each todos as todo}
