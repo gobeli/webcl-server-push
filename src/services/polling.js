@@ -1,7 +1,9 @@
+import { BASE_URL } from './util';
+
 let todos, polling;
 
 const poll = async () => {
-  const state = await fetch('http://localhost:3000/').then(res => res.json());
+  const state = await fetch(BASE_URL).then(res => res.json());
   todos.set(state);
   if (polling) {
     setTimeout(poll, 1000);
@@ -14,20 +16,20 @@ const connect = todoStore => {
   poll();
 }
 
+const addTodo = async text => {
+  if (!todos) {
+    throw 'Service not initialized!';
+  }
+  await fetch(BASE_URL, { method: 'POST', body: JSON.stringify({ text, done: false }) });
+}
+
 const disconnect = () => {
   polling = false;
   todos = null;
 }
 
-const addTodo = async text => {
-  if (!todos) {
-    throw 'Service not initialized!';
-  }
-  await fetch('http://localhost:3000/', { method: 'POST', body: JSON.stringify({ text, done: false }) });
-}
-
 export default {
-  name: 'Polling Service',
+  name: 'Polling',
   connect,
   disconnect,
   addTodo

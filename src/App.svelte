@@ -4,8 +4,9 @@
 	import TodoList from './TodoList.svelte';
 	import LocalService from './services/local';
 	import PollingService from './services/polling';
+	import ServerSentEventsService from './services/sse';
 
-	const services = [LocalService, PollingService];
+	const services = [LocalService, PollingService, ServerSentEventsService];
 	const todos = writable([]);
 	let todoText, selectedService;
 

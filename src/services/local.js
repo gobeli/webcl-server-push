@@ -22,7 +22,7 @@ const addTodo = text => {
 }
 
 export default {
-  name: 'Local Service',
+  name: 'Local',
   connect,
   disconnect,
   addTodo
