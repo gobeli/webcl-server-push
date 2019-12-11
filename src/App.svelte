@@ -34,12 +34,15 @@
 
 <main>
 	<section>
+		<label for="services">Choose service</label>
 		<select name="services" on:change={evt => selectService(evt.target.value)}>
 			{#each services as service}
 				<option value={service.name}>{service.name}</option>
 			{/each}
 		</select>
 		<form on:submit={evt => submit(evt)}>
+			<label for="text">Todo</label>
+			<div />
 			<input type="text" name="text" bind:value={todoText} placeholder="Todo">
 			<input type="submit" />
 		</form>
@@ -61,5 +64,17 @@
 	}
 	section {
 		height: 100%;
+	}
+	form {
+		display: grid;
+		grid-template-columns: 1fr auto;
+		grid-template-rows: auto auto;
+		grid-column-gap: 0.5rem;
+	}
+	label {
+		font-size: .8rem;
+	}
+	select {
+		width: 100%;
 	}
 </style>
