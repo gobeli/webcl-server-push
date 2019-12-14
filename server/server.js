@@ -28,6 +28,29 @@ app.get('/sse', (req, res) => {
   emitter.on('stateChanged', state => res.write('data: ' + JSON.stringify(state) + '\n\n'));
 });
 
+app.get('/longpoll', (req, res) => {
+  var responded = false;
+  const listener = _ => { 
+    responded = true;
+    res.json(state);
+  };
+  
+  emitter.once('stateChanged', listener);
+
+  req.on("abort", function() { //I tried also "aborted", "close", "closed", "finish", "finished"..no luck
+    emitter.removeListener("stateChanged", listener);
+  });
+
+  setTimeout(() => {
+    if (!responded) {
+      emitter.removeListener("stateChanged", listener);
+      res.status(204).end();
+    }
+  }, 30000);
+});
+
+
+
 app.post('/', function(req, res) {
   const todo = JSON.parse(req.body);
   state = [...state, todo];

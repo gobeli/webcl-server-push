@@ -5,9 +5,10 @@
 	import Debug from './Debug.svelte';
 	import LocalService from './services/local';
 	import PollingService from './services/polling';
+	import LongpollingService from './services/longpolling';
 	import ServerSentEventsService from './services/sse';
 
-	const services = [LocalService, PollingService, ServerSentEventsService];
+	const services = [LocalService, PollingService, LongpollingService, ServerSentEventsService];
 	const todos$ = writable([]);
 	const service$ = writable(null);
 	let todoText, selectedService;
