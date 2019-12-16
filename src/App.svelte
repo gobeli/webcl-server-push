@@ -7,8 +7,9 @@
 	import PollingService from './services/polling';
 	import LongpollingService from './services/longpolling';
 	import ServerSentEventsService from './services/sse';
+	import WebSocketEventsService from './services/ws';
 
-	const services = [LocalService, PollingService, LongpollingService, ServerSentEventsService];
+	const services = [LocalService, PollingService, LongpollingService, ServerSentEventsService, WebSocketEventsService];
 	const todos$ = writable([]);
 	const service$ = writable(null);
 	let todoText, selectedService;

@@ -2,10 +2,14 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const EventEmitter = require('events');
+const http = require('http');
 
 const emitter = new EventEmitter();
 
 const app = express();
+const server = http.createServer(app);
+const expressWs = require('express-ws')(app, server);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(bodyParser.text());
@@ -49,7 +53,22 @@ app.get('/longpoll', (req, res) => {
   }, 30000);
 });
 
+app.ws('/ws', (ws, req) => {
+  const onStateChanged = state => {
+    ws.send(JSON.stringify(state));
+  };
+  emitter.on('stateChanged', onStateChanged);
 
+  ws.on('message', msg => {
+    const state = JSON.parse(msg);
+    state = [...state, todo];
+    emitter.emit('stateChanged', state);
+  });
+
+  ws.on('close', () => {
+    emitter.off('stateChanged', onStateChanged);
+  });
+});
 
 app.post('/', function(req, res) {
   const todo = JSON.parse(req.body);
