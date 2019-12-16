@@ -6,8 +6,9 @@ const connect = todoStore => {
   ws = new WebSocket(WS_BASE_URL);
   todos = todoStore;
   ws.addEventListener('message', msg => {
-    todos.set(JSON.parse(msg));
+    todos.set(JSON.parse(msg.data));
   });
+  ws.addEventListener('error', console.warn)
 }
 
 const addTodo = text => {

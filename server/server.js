@@ -2,13 +2,11 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const EventEmitter = require('events');
-const http = require('http');
 
 const emitter = new EventEmitter();
 
 const app = express();
-const server = http.createServer(app);
-const expressWs = require('express-ws')(app, server);
+const expressWs = require('express-ws')(app);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -56,11 +54,10 @@ app.get('/longpoll', (req, res) => {
 app.ws('/ws', (ws, req) => {
   const onStateChanged = state => {
     ws.send(JSON.stringify(state));
-  };
-  emitter.on('stateChanged', onStateChanged);
+  }; 
 
   ws.on('message', msg => {
-    const state = JSON.parse(msg);
+    const todo = JSON.parse(msg);
     state = [...state, todo];
     emitter.emit('stateChanged', state);
   });
@@ -68,14 +65,18 @@ app.ws('/ws', (ws, req) => {
   ws.on('close', () => {
     emitter.off('stateChanged', onStateChanged);
   });
+  
+  emitter.on('stateChanged', onStateChanged);
+  ws.send(JSON.stringify(state));
 });
-
+ 
 app.post('/', function(req, res) {
   const todo = JSON.parse(req.body);
   state = [...state, todo];
   emitter.emit('stateChanged', state);
   res.status(204).end();
 });
+
 
 app.listen(3000, function () {
   console.log('Example app listening on port 3000!');

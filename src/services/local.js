@@ -3,7 +3,7 @@ let todos, interval;
 const connect = todoStore => {
   todos = todoStore;
   interval = setInterval(() => {
-    addTodo('bla');
+    addTodo('test');
   }, 3000);
 }
 
