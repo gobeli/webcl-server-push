@@ -3,9 +3,9 @@ import { BASE_URL } from './util';
 let todos, polling;
 
 const poll = async () => {
-  const state = await fetch(BASE_URL).then(res => res.json());
-  todos.set(state);
   if (polling) {
+    const state = await fetch(BASE_URL).then(res => res.json());
+    todos.set(state);
     setTimeout(poll, 1000);
   }
 }

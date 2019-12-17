@@ -7,7 +7,7 @@ describe('local service', () => {
     const todos = writable([]);
     todos.subscribe(todos => {
       if (todos.length === 1) {
-        expect(todos[0].text).toBe('bla');
+        expect(todos[0].text).toBe('test');
         done();
       }
     });
